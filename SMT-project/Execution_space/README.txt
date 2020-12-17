@@ -1,4 +1,5 @@
-Scripts are found in the "scripts" folder
+Scripts are found in the "scripts" folder. Place one directly in the Execution_space and not in a subfolder to run it.
+
 
 To run the benchmarks:
 Make sure that the scrambler program and that the run_scrambler are both in the Execution_space folder, and not in a subfolder.
@@ -8,8 +9,6 @@ Make sure that the scrambler program and that the run_scrambler are both in the 
 2. Simply run the 'run_scrambler' script as ./run_scrambler. The benchmark in the folder will then execute.
 
 3. Manually add the name of the benchmark folder to the name of the 'runtime_result' folder.
-
-
 
 
 ----------------------------------------------------------------------------------
