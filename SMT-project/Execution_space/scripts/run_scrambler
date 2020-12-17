@@ -1,0 +1,27 @@
+#!/bin/bash
+#A script for running scrambler on all .smt2 files in the folder and its subfolders
+
+(echo "filename, symbols, declare_fun, declare_sort, check_sat, assert, push, pop, let_bindings, forall, exists, core_true, core_false, core_not, core_imply, core_and, core_or, core_xor, core_distinct, mult, plus, equals, int_le_or_gr, int_leq_or_grq, bv_and, bv_or, bv_xor, bv_nand, bv_nor, bv_comp, bv_add, bv_mul, bvs_l_g, bvs_le_ge, bvu_l_g, bvu_le_ge, status (0-undef, 1-sat, 2-unsat, 3-unknown), process_time") >> result.txt
+
+for i in $(find . -name "*.smt2")
+#for i in *.smt2
+do
+    timestart=$(date +%3s%6N) #timestamp from before the problem is processed (?) where s and 6N are specifiers for seconds and microseconds (GNU extension)
+    files=$(./scrambler < $i) #this is where the problem is processed, right?
+    if [[ $files ]]; then #does this mean not empty? i.e. result
+	timestop=$(date +%3s%6N) #time represented in microseconds in at most nine digits
+	timesum=$((timestop - timestart))
+	printf -v paddedts "%.9d\n" $timesum #padding the process time with leading zeroes up to nine digits
+	echo -n $i       >> result.txt #write name
+	echo "," $files"," ${paddedts}  >> result.txt #write result
+    else
+	echo $i >> result.txt #what does this line do?
+    fi
+done
+
+
+count=$(wc -l < result.txt)
+echo "inputs processed :" $count >> data.txt
+echo -n "potential inputs : " >> data.txt
+find . -name '*.smt2' | wc -l >> data.txt
+

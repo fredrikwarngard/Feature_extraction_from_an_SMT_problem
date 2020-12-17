@@ -1,0 +1,2147 @@
+Terminals unused in grammar
+
+   TK_EOF
+   "get-model"
+
+
+Grammar
+
+    0 $accept: single_command $end
+
+    1 single_command: command
+
+    2 command: cmd_set_logic
+    3        | cmd_declare_sort
+    4        | cmd_define_sort
+    5        | cmd_declare_fun
+    6        | cmd_define_fun
+    7        | cmd_push
+    8        | cmd_pop
+    9        | cmd_assert
+   10        | cmd_check_sat
+   11        | cmd_get_assertions
+   12        | cmd_get_unsat_core
+   13        | cmd_get_proof
+   14        | cmd_set_option
+   15        | cmd_get_info
+   16        | cmd_set_info
+   17        | cmd_get_assignment
+   18        | cmd_get_value
+   19        | cmd_exit
+   20        | cmd_error
+
+   21 cmd_error: %empty
+
+   22 cmd_set_logic: '(' "set-logic" logic_name ')'
+
+   23 cmd_declare_sort: '(' "declare-sort" SYMBOL NUMERAL ')'
+
+   24 cmd_define_sort: '(' "define-sort" SYMBOL '(' ')' a_sort ')'
+   25                | '(' "define-sort" SYMBOL '(' sort_param_list ')' a_sort ')'
+
+   26 cmd_declare_fun: '(' "declare-fun" SYMBOL '(' ')' a_sort ')'
+   27                | '(' "declare-fun" SYMBOL '(' sort_list ')' a_sort ')'
+
+   28 cmd_define_fun: '(' "define-fun" SYMBOL '(' ')' a_sort a_term ')'
+   29               | '(' "define-fun" SYMBOL '(' quant_var_list ')' a_sort a_term ')'
+
+   30 cmd_push: '(' "push" NUMERAL ')'
+
+   31 cmd_pop: '(' "pop" NUMERAL ')'
+
+   32 cmd_assert: '(' "assert" a_term ')'
+
+   33 cmd_check_sat: '(' "check-sat" ')'
+
+   34 cmd_get_assertions: '(' "get-assertions" ')'
+
+   35 cmd_get_unsat_core: '(' "get-unsat-core" ')'
+
+   36 cmd_get_proof: '(' "get-proof" ')'
+
+   37 cmd_set_option: '(' "set-option" KEYWORD NUMERAL ')'
+   38               | '(' "set-option" KEYWORD RATCONSTANT ')'
+   39               | '(' "set-option" KEYWORD SYMBOL ')'
+   40               | '(' "set-option" KEYWORD STRING ')'
+
+   41 cmd_get_info: '(' "get-info" KEYWORD ')'
+
+   42 cmd_set_info: '(' "set-info" KEYWORD info_argument ')'
+
+   43 info_argument: NUMERAL
+   44              | RATCONSTANT
+   45              | SYMBOL
+   46              | STRING
+
+   47 cmd_get_assignment: '(' "get-assignment" ')'
+
+   48 cmd_get_value: '(' "get-value" '(' term_list ')' ')'
+
+   49 cmd_exit: '(' "exit" ')'
+
+   50 a_term: annotated_term
+   51       | plain_term
+
+   52 annotated_term: '(' "!" a_term term_attribute_list ')'
+
+   53 plain_term: '(' "let" '(' parallel_let_bindings ')' a_term ')'
+   54           | '(' "forall" '(' quant_var_list ')' a_term ')'
+   55           | '(' "exists" '(' quant_var_list ')' a_term ')'
+   56           | term_num_constant
+   57           | term_symbol
+   58           | '(' term_symbol term_list ')'
+
+   59 term_symbol: term_unqualified_symbol
+   60            | '(' "as" term_unqualified_symbol a_sort ')'
+
+   61 term_unqualified_symbol: SYMBOL
+   62                        | '(' "_" SYMBOL num_list ')'
+
+   63 term_num_constant: NUMERAL
+   64                  | RATCONSTANT
+   65                  | BINCONSTANT
+   66                  | HEXCONSTANT
+   67                  | '(' "_" BVCONSTANT NUMERAL ')'
+
+   68 term_attribute_list: term_attribute
+   69                    | term_attribute_list term_attribute
+
+   70 term_attribute: KEYWORD generic_sexp
+
+   71 generic_sexp: info_argument
+   72             | '(' ')'
+   73             | '(' generic_sexp_list ')'
+
+   74 generic_sexp_list: generic_sexp
+   75                  | generic_sexp_list generic_sexp
+
+   76 num_list: NUMERAL
+   77         | num_list NUMERAL
+
+   78 int_list: NUMERAL
+   79         | int_list NUMERAL
+
+   80 term_list: a_term
+   81          | term_list a_term
+
+   82 quant_var_list: '(' SYMBOL a_sort ')'
+   83               | quant_var_list '(' SYMBOL a_sort ')'
+
+   84 parallel_let_bindings: let_bindings
+
+   85 let_bindings: let_binding
+   86             | let_bindings let_binding
+
+   87 let_binding: '(' SYMBOL a_term ')'
+
+   88 logic_name: SYMBOL
+   89           | SYMBOL '[' NUMERAL ']'
+
+   90 sort_list: a_sort
+   91          | sort_list a_sort
+
+   92 a_sort: SYMBOL
+   93       | '(' "_" SYMBOL int_list ')'
+   94       | '(' SYMBOL sort_list ')'
+
+   95 sort_param_list: a_sort_param
+   96                | sort_param_list a_sort_param
+
+   97 a_sort_param: SYMBOL
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'(' (40) 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41
+    42 47 48 49 52 53 54 55 58 60 62 67 72 73 82 83 87 93 94
+')' (41) 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41
+    42 47 48 49 52 53 54 55 58 60 62 67 72 73 82 83 87 93 94
+'[' (91) 89
+']' (93) 89
+error (256)
+BINCONSTANT (258) 65
+HEXCONSTANT (259) 66
+BVCONSTANT (260) 67
+RATCONSTANT (261) 38 44 64
+NUMERAL (262) 23 30 31 37 43 63 67 76 77 78 79 89
+STRING (263) 40 46
+SYMBOL (264) 23 24 25 26 27 28 29 39 45 61 62 82 83 87 88 89 92 93
+    94 97
+KEYWORD (265) 37 38 39 40 41 42 70
+TK_EOF (266)
+"as" (267) 60
+"_" (268) 62 67 93
+"let" (269) 53
+"!" (270) 52
+"forall" (271) 54
+"exists" (272) 55
+"set-logic" (273) 22
+"declare-sort" (274) 23
+"define-sort" (275) 24 25
+"declare-fun" (276) 26 27
+"define-fun" (277) 28 29
+"push" (278) 30
+"pop" (279) 31
+"assert" (280) 32
+"check-sat" (281) 33
+"get-assertions" (282) 34
+"get-unsat-core" (283) 35
+"get-proof" (284) 36
+"set-option" (285) 37 38 39 40
+"get-info" (286) 41
+"set-info" (287) 42
+"get-assignment" (288) 47
+"get-model" (289)
+"get-value" (290) 48
+"exit" (291) 49
+
+
+Nonterminals, with rules where they appear
+
+$accept (41)
+    on left: 0
+single_command (42)
+    on left: 1, on right: 0
+command (43)
+    on left: 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20, on right:
+    1
+cmd_error (44)
+    on left: 21, on right: 20
+cmd_set_logic (45)
+    on left: 22, on right: 2
+cmd_declare_sort (46)
+    on left: 23, on right: 3
+cmd_define_sort (47)
+    on left: 24 25, on right: 4
+cmd_declare_fun (48)
+    on left: 26 27, on right: 5
+cmd_define_fun (49)
+    on left: 28 29, on right: 6
+cmd_push (50)
+    on left: 30, on right: 7
+cmd_pop (51)
+    on left: 31, on right: 8
+cmd_assert (52)
+    on left: 32, on right: 9
+cmd_check_sat (53)
+    on left: 33, on right: 10
+cmd_get_assertions (54)
+    on left: 34, on right: 11
+cmd_get_unsat_core (55)
+    on left: 35, on right: 12
+cmd_get_proof (56)
+    on left: 36, on right: 13
+cmd_set_option (57)
+    on left: 37 38 39 40, on right: 14
+cmd_get_info (58)
+    on left: 41, on right: 15
+cmd_set_info (59)
+    on left: 42, on right: 16
+info_argument (60)
+    on left: 43 44 45 46, on right: 42 71
+cmd_get_assignment (61)
+    on left: 47, on right: 17
+cmd_get_value (62)
+    on left: 48, on right: 18
+cmd_exit (63)
+    on left: 49, on right: 19
+a_term (64)
+    on left: 50 51, on right: 28 29 32 52 53 54 55 80 81 87
+annotated_term (65)
+    on left: 52, on right: 50
+plain_term (66)
+    on left: 53 54 55 56 57 58, on right: 51
+term_symbol (67)
+    on left: 59 60, on right: 57 58
+term_unqualified_symbol (68)
+    on left: 61 62, on right: 59 60
+term_num_constant (69)
+    on left: 63 64 65 66 67, on right: 56
+term_attribute_list (70)
+    on left: 68 69, on right: 52 69
+term_attribute (71)
+    on left: 70, on right: 68 69
+generic_sexp (72)
+    on left: 71 72 73, on right: 70 74 75
+generic_sexp_list (73)
+    on left: 74 75, on right: 73 75
+num_list (74)
+    on left: 76 77, on right: 62 77
+int_list (75)
+    on left: 78 79, on right: 79 93
+term_list (76)
+    on left: 80 81, on right: 48 58 81
+quant_var_list (77)
+    on left: 82 83, on right: 29 54 55 83
+parallel_let_bindings (78)
+    on left: 84, on right: 53
+let_bindings (79)
+    on left: 85 86, on right: 84 86
+let_binding (80)
+    on left: 87, on right: 85 86
+logic_name (81)
+    on left: 88 89, on right: 22
+sort_list (82)
+    on left: 90 91, on right: 27 91 94
+a_sort (83)
+    on left: 92 93 94, on right: 24 25 26 27 28 29 60 82 83 90 91
+sort_param_list (84)
+    on left: 95 96, on right: 25 96
+a_sort_param (85)
+    on left: 97, on right: 95 96
+
+
+State 0
+
+    0 $accept: . single_command $end
+
+    '('  shift, and go to state 1
+
+    $default  reduce using rule 21 (cmd_error)
+
+    single_command      go to state 2
+    command             go to state 3
+    cmd_error           go to state 4
+    cmd_set_logic       go to state 5
+    cmd_declare_sort    go to state 6
+    cmd_define_sort     go to state 7
+    cmd_declare_fun     go to state 8
+    cmd_define_fun      go to state 9
+    cmd_push            go to state 10
+    cmd_pop             go to state 11
+    cmd_assert          go to state 12
+    cmd_check_sat       go to state 13
+    cmd_get_assertions  go to state 14
+    cmd_get_unsat_core  go to state 15
+    cmd_get_proof       go to state 16
+    cmd_set_option      go to state 17
+    cmd_get_info        go to state 18
+    cmd_set_info        go to state 19
+    cmd_get_assignment  go to state 20
+    cmd_get_value       go to state 21
+    cmd_exit            go to state 22
+
+
+State 1
+
+   22 cmd_set_logic: '(' . "set-logic" logic_name ')'
+   23 cmd_declare_sort: '(' . "declare-sort" SYMBOL NUMERAL ')'
+   24 cmd_define_sort: '(' . "define-sort" SYMBOL '(' ')' a_sort ')'
+   25                | '(' . "define-sort" SYMBOL '(' sort_param_list ')' a_sort ')'
+   26 cmd_declare_fun: '(' . "declare-fun" SYMBOL '(' ')' a_sort ')'
+   27                | '(' . "declare-fun" SYMBOL '(' sort_list ')' a_sort ')'
+   28 cmd_define_fun: '(' . "define-fun" SYMBOL '(' ')' a_sort a_term ')'
+   29               | '(' . "define-fun" SYMBOL '(' quant_var_list ')' a_sort a_term ')'
+   30 cmd_push: '(' . "push" NUMERAL ')'
+   31 cmd_pop: '(' . "pop" NUMERAL ')'
+   32 cmd_assert: '(' . "assert" a_term ')'
+   33 cmd_check_sat: '(' . "check-sat" ')'
+   34 cmd_get_assertions: '(' . "get-assertions" ')'
+   35 cmd_get_unsat_core: '(' . "get-unsat-core" ')'
+   36 cmd_get_proof: '(' . "get-proof" ')'
+   37 cmd_set_option: '(' . "set-option" KEYWORD NUMERAL ')'
+   38               | '(' . "set-option" KEYWORD RATCONSTANT ')'
+   39               | '(' . "set-option" KEYWORD SYMBOL ')'
+   40               | '(' . "set-option" KEYWORD STRING ')'
+   41 cmd_get_info: '(' . "get-info" KEYWORD ')'
+   42 cmd_set_info: '(' . "set-info" KEYWORD info_argument ')'
+   47 cmd_get_assignment: '(' . "get-assignment" ')'
+   48 cmd_get_value: '(' . "get-value" '(' term_list ')' ')'
+   49 cmd_exit: '(' . "exit" ')'
+
+    "set-logic"       shift, and go to state 23
+    "declare-sort"    shift, and go to state 24
+    "define-sort"     shift, and go to state 25
+    "declare-fun"     shift, and go to state 26
+    "define-fun"      shift, and go to state 27
+    "push"            shift, and go to state 28
+    "pop"             shift, and go to state 29
+    "assert"          shift, and go to state 30
+    "check-sat"       shift, and go to state 31
+    "get-assertions"  shift, and go to state 32
+    "get-unsat-core"  shift, and go to state 33
+    "get-proof"       shift, and go to state 34
+    "set-option"      shift, and go to state 35
+    "get-info"        shift, and go to state 36
+    "set-info"        shift, and go to state 37
+    "get-assignment"  shift, and go to state 38
+    "get-value"       shift, and go to state 39
+    "exit"            shift, and go to state 40
+
+
+State 2
+
+    0 $accept: single_command . $end
+
+    $end  shift, and go to state 41
+
+
+State 3
+
+    1 single_command: command .
+
+    $default  reduce using rule 1 (single_command)
+
+
+State 4
+
+   20 command: cmd_error .
+
+    $default  reduce using rule 20 (command)
+
+
+State 5
+
+    2 command: cmd_set_logic .
+
+    $default  reduce using rule 2 (command)
+
+
+State 6
+
+    3 command: cmd_declare_sort .
+
+    $default  reduce using rule 3 (command)
+
+
+State 7
+
+    4 command: cmd_define_sort .
+
+    $default  reduce using rule 4 (command)
+
+
+State 8
+
+    5 command: cmd_declare_fun .
+
+    $default  reduce using rule 5 (command)
+
+
+State 9
+
+    6 command: cmd_define_fun .
+
+    $default  reduce using rule 6 (command)
+
+
+State 10
+
+    7 command: cmd_push .
+
+    $default  reduce using rule 7 (command)
+
+
+State 11
+
+    8 command: cmd_pop .
+
+    $default  reduce using rule 8 (command)
+
+
+State 12
+
+    9 command: cmd_assert .
+
+    $default  reduce using rule 9 (command)
+
+
+State 13
+
+   10 command: cmd_check_sat .
+
+    $default  reduce using rule 10 (command)
+
+
+State 14
+
+   11 command: cmd_get_assertions .
+
+    $default  reduce using rule 11 (command)
+
+
+State 15
+
+   12 command: cmd_get_unsat_core .
+
+    $default  reduce using rule 12 (command)
+
+
+State 16
+
+   13 command: cmd_get_proof .
+
+    $default  reduce using rule 13 (command)
+
+
+State 17
+
+   14 command: cmd_set_option .
+
+    $default  reduce using rule 14 (command)
+
+
+State 18
+
+   15 command: cmd_get_info .
+
+    $default  reduce using rule 15 (command)
+
+
+State 19
+
+   16 command: cmd_set_info .
+
+    $default  reduce using rule 16 (command)
+
+
+State 20
+
+   17 command: cmd_get_assignment .
+
+    $default  reduce using rule 17 (command)
+
+
+State 21
+
+   18 command: cmd_get_value .
+
+    $default  reduce using rule 18 (command)
+
+
+State 22
+
+   19 command: cmd_exit .
+
+    $default  reduce using rule 19 (command)
+
+
+State 23
+
+   22 cmd_set_logic: '(' "set-logic" . logic_name ')'
+
+    SYMBOL  shift, and go to state 42
+
+    logic_name  go to state 43
+
+
+State 24
+
+   23 cmd_declare_sort: '(' "declare-sort" . SYMBOL NUMERAL ')'
+
+    SYMBOL  shift, and go to state 44
+
+
+State 25
+
+   24 cmd_define_sort: '(' "define-sort" . SYMBOL '(' ')' a_sort ')'
+   25                | '(' "define-sort" . SYMBOL '(' sort_param_list ')' a_sort ')'
+
+    SYMBOL  shift, and go to state 45
+
+
+State 26
+
+   26 cmd_declare_fun: '(' "declare-fun" . SYMBOL '(' ')' a_sort ')'
+   27                | '(' "declare-fun" . SYMBOL '(' sort_list ')' a_sort ')'
+
+    SYMBOL  shift, and go to state 46
+
+
+State 27
+
+   28 cmd_define_fun: '(' "define-fun" . SYMBOL '(' ')' a_sort a_term ')'
+   29               | '(' "define-fun" . SYMBOL '(' quant_var_list ')' a_sort a_term ')'
+
+    SYMBOL  shift, and go to state 47
+
+
+State 28
+
+   30 cmd_push: '(' "push" . NUMERAL ')'
+
+    NUMERAL  shift, and go to state 48
+
+
+State 29
+
+   31 cmd_pop: '(' "pop" . NUMERAL ')'
+
+    NUMERAL  shift, and go to state 49
+
+
+State 30
+
+   32 cmd_assert: '(' "assert" . a_term ')'
+
+    BINCONSTANT  shift, and go to state 50
+    HEXCONSTANT  shift, and go to state 51
+    RATCONSTANT  shift, and go to state 52
+    NUMERAL      shift, and go to state 53
+    SYMBOL       shift, and go to state 54
+    '('          shift, and go to state 55
+
+    a_term                   go to state 56
+    annotated_term           go to state 57
+    plain_term               go to state 58
+    term_symbol              go to state 59
+    term_unqualified_symbol  go to state 60
+    term_num_constant        go to state 61
+
+
+State 31
+
+   33 cmd_check_sat: '(' "check-sat" . ')'
+
+    ')'  shift, and go to state 62
+
+
+State 32
+
+   34 cmd_get_assertions: '(' "get-assertions" . ')'
+
+    ')'  shift, and go to state 63
+
+
+State 33
+
+   35 cmd_get_unsat_core: '(' "get-unsat-core" . ')'
+
+    ')'  shift, and go to state 64
+
+
+State 34
+
+   36 cmd_get_proof: '(' "get-proof" . ')'
+
+    ')'  shift, and go to state 65
+
+
+State 35
+
+   37 cmd_set_option: '(' "set-option" . KEYWORD NUMERAL ')'
+   38               | '(' "set-option" . KEYWORD RATCONSTANT ')'
+   39               | '(' "set-option" . KEYWORD SYMBOL ')'
+   40               | '(' "set-option" . KEYWORD STRING ')'
+
+    KEYWORD  shift, and go to state 66
+
+
+State 36
+
+   41 cmd_get_info: '(' "get-info" . KEYWORD ')'
+
+    KEYWORD  shift, and go to state 67
+
+
+State 37
+
+   42 cmd_set_info: '(' "set-info" . KEYWORD info_argument ')'
+
+    KEYWORD  shift, and go to state 68
+
+
+State 38
+
+   47 cmd_get_assignment: '(' "get-assignment" . ')'
+
+    ')'  shift, and go to state 69
+
+
+State 39
+
+   48 cmd_get_value: '(' "get-value" . '(' term_list ')' ')'
+
+    '('  shift, and go to state 70
+
+
+State 40
+
+   49 cmd_exit: '(' "exit" . ')'
+
+    ')'  shift, and go to state 71
+
+
+State 41
+
+    0 $accept: single_command $end .
+
+    $default  accept
+
+
+State 42
+
+   88 logic_name: SYMBOL .
+   89           | SYMBOL . '[' NUMERAL ']'
+
+    '['  shift, and go to state 72
+
+    $default  reduce using rule 88 (logic_name)
+
+
+State 43
+
+   22 cmd_set_logic: '(' "set-logic" logic_name . ')'
+
+    ')'  shift, and go to state 73
+
+
+State 44
+
+   23 cmd_declare_sort: '(' "declare-sort" SYMBOL . NUMERAL ')'
+
+    NUMERAL  shift, and go to state 74
+
+
+State 45
+
+   24 cmd_define_sort: '(' "define-sort" SYMBOL . '(' ')' a_sort ')'
+   25                | '(' "define-sort" SYMBOL . '(' sort_param_list ')' a_sort ')'
+
+    '('  shift, and go to state 75
+
+
+State 46
+
+   26 cmd_declare_fun: '(' "declare-fun" SYMBOL . '(' ')' a_sort ')'
+   27                | '(' "declare-fun" SYMBOL . '(' sort_list ')' a_sort ')'
+
+    '('  shift, and go to state 76
+
+
+State 47
+
+   28 cmd_define_fun: '(' "define-fun" SYMBOL . '(' ')' a_sort a_term ')'
+   29               | '(' "define-fun" SYMBOL . '(' quant_var_list ')' a_sort a_term ')'
+
+    '('  shift, and go to state 77
+
+
+State 48
+
+   30 cmd_push: '(' "push" NUMERAL . ')'
+
+    ')'  shift, and go to state 78
+
+
+State 49
+
+   31 cmd_pop: '(' "pop" NUMERAL . ')'
+
+    ')'  shift, and go to state 79
+
+
+State 50
+
+   65 term_num_constant: BINCONSTANT .
+
+    $default  reduce using rule 65 (term_num_constant)
+
+
+State 51
+
+   66 term_num_constant: HEXCONSTANT .
+
+    $default  reduce using rule 66 (term_num_constant)
+
+
+State 52
+
+   64 term_num_constant: RATCONSTANT .
+
+    $default  reduce using rule 64 (term_num_constant)
+
+
+State 53
+
+   63 term_num_constant: NUMERAL .
+
+    $default  reduce using rule 63 (term_num_constant)
+
+
+State 54
+
+   61 term_unqualified_symbol: SYMBOL .
+
+    $default  reduce using rule 61 (term_unqualified_symbol)
+
+
+State 55
+
+   52 annotated_term: '(' . "!" a_term term_attribute_list ')'
+   53 plain_term: '(' . "let" '(' parallel_let_bindings ')' a_term ')'
+   54           | '(' . "forall" '(' quant_var_list ')' a_term ')'
+   55           | '(' . "exists" '(' quant_var_list ')' a_term ')'
+   58           | '(' . term_symbol term_list ')'
+   60 term_symbol: '(' . "as" term_unqualified_symbol a_sort ')'
+   62 term_unqualified_symbol: '(' . "_" SYMBOL num_list ')'
+   67 term_num_constant: '(' . "_" BVCONSTANT NUMERAL ')'
+
+    SYMBOL    shift, and go to state 54
+    "as"      shift, and go to state 80
+    "_"       shift, and go to state 81
+    "let"     shift, and go to state 82
+    "!"       shift, and go to state 83
+    "forall"  shift, and go to state 84
+    "exists"  shift, and go to state 85
+    '('       shift, and go to state 86
+
+    term_symbol              go to state 87
+    term_unqualified_symbol  go to state 60
+
+
+State 56
+
+   32 cmd_assert: '(' "assert" a_term . ')'
+
+    ')'  shift, and go to state 88
+
+
+State 57
+
+   50 a_term: annotated_term .
+
+    $default  reduce using rule 50 (a_term)
+
+
+State 58
+
+   51 a_term: plain_term .
+
+    $default  reduce using rule 51 (a_term)
+
+
+State 59
+
+   57 plain_term: term_symbol .
+
+    $default  reduce using rule 57 (plain_term)
+
+
+State 60
+
+   59 term_symbol: term_unqualified_symbol .
+
+    $default  reduce using rule 59 (term_symbol)
+
+
+State 61
+
+   56 plain_term: term_num_constant .
+
+    $default  reduce using rule 56 (plain_term)
+
+
+State 62
+
+   33 cmd_check_sat: '(' "check-sat" ')' .
+
+    $default  reduce using rule 33 (cmd_check_sat)
+
+
+State 63
+
+   34 cmd_get_assertions: '(' "get-assertions" ')' .
+
+    $default  reduce using rule 34 (cmd_get_assertions)
+
+
+State 64
+
+   35 cmd_get_unsat_core: '(' "get-unsat-core" ')' .
+
+    $default  reduce using rule 35 (cmd_get_unsat_core)
+
+
+State 65
+
+   36 cmd_get_proof: '(' "get-proof" ')' .
+
+    $default  reduce using rule 36 (cmd_get_proof)
+
+
+State 66
+
+   37 cmd_set_option: '(' "set-option" KEYWORD . NUMERAL ')'
+   38               | '(' "set-option" KEYWORD . RATCONSTANT ')'
+   39               | '(' "set-option" KEYWORD . SYMBOL ')'
+   40               | '(' "set-option" KEYWORD . STRING ')'
+
+    RATCONSTANT  shift, and go to state 89
+    NUMERAL      shift, and go to state 90
+    STRING       shift, and go to state 91
+    SYMBOL       shift, and go to state 92
+
+
+State 67
+
+   41 cmd_get_info: '(' "get-info" KEYWORD . ')'
+
+    ')'  shift, and go to state 93
+
+
+State 68
+
+   42 cmd_set_info: '(' "set-info" KEYWORD . info_argument ')'
+
+    RATCONSTANT  shift, and go to state 94
+    NUMERAL      shift, and go to state 95
+    STRING       shift, and go to state 96
+    SYMBOL       shift, and go to state 97
+
+    info_argument  go to state 98
+
+
+State 69
+
+   47 cmd_get_assignment: '(' "get-assignment" ')' .
+
+    $default  reduce using rule 47 (cmd_get_assignment)
+
+
+State 70
+
+   48 cmd_get_value: '(' "get-value" '(' . term_list ')' ')'
+
+    BINCONSTANT  shift, and go to state 50
+    HEXCONSTANT  shift, and go to state 51
+    RATCONSTANT  shift, and go to state 52
+    NUMERAL      shift, and go to state 53
+    SYMBOL       shift, and go to state 54
+    '('          shift, and go to state 55
+
+    a_term                   go to state 99
+    annotated_term           go to state 57
+    plain_term               go to state 58
+    term_symbol              go to state 59
+    term_unqualified_symbol  go to state 60
+    term_num_constant        go to state 61
+    term_list                go to state 100
+
+
+State 71
+
+   49 cmd_exit: '(' "exit" ')' .
+
+    $default  reduce using rule 49 (cmd_exit)
+
+
+State 72
+
+   89 logic_name: SYMBOL '[' . NUMERAL ']'
+
+    NUMERAL  shift, and go to state 101
+
+
+State 73
+
+   22 cmd_set_logic: '(' "set-logic" logic_name ')' .
+
+    $default  reduce using rule 22 (cmd_set_logic)
+
+
+State 74
+
+   23 cmd_declare_sort: '(' "declare-sort" SYMBOL NUMERAL . ')'
+
+    ')'  shift, and go to state 102
+
+
+State 75
+
+   24 cmd_define_sort: '(' "define-sort" SYMBOL '(' . ')' a_sort ')'
+   25                | '(' "define-sort" SYMBOL '(' . sort_param_list ')' a_sort ')'
+
+    SYMBOL  shift, and go to state 103
+    ')'     shift, and go to state 104
+
+    sort_param_list  go to state 105
+    a_sort_param     go to state 106
+
+
+State 76
+
+   26 cmd_declare_fun: '(' "declare-fun" SYMBOL '(' . ')' a_sort ')'
+   27                | '(' "declare-fun" SYMBOL '(' . sort_list ')' a_sort ')'
+
+    SYMBOL  shift, and go to state 107
+    '('     shift, and go to state 108
+    ')'     shift, and go to state 109
+
+    sort_list  go to state 110
+    a_sort     go to state 111
+
+
+State 77
+
+   28 cmd_define_fun: '(' "define-fun" SYMBOL '(' . ')' a_sort a_term ')'
+   29               | '(' "define-fun" SYMBOL '(' . quant_var_list ')' a_sort a_term ')'
+
+    '('  shift, and go to state 112
+    ')'  shift, and go to state 113
+
+    quant_var_list  go to state 114
+
+
+State 78
+
+   30 cmd_push: '(' "push" NUMERAL ')' .
+
+    $default  reduce using rule 30 (cmd_push)
+
+
+State 79
+
+   31 cmd_pop: '(' "pop" NUMERAL ')' .
+
+    $default  reduce using rule 31 (cmd_pop)
+
+
+State 80
+
+   60 term_symbol: '(' "as" . term_unqualified_symbol a_sort ')'
+
+    SYMBOL  shift, and go to state 54
+    '('     shift, and go to state 115
+
+    term_unqualified_symbol  go to state 116
+
+
+State 81
+
+   62 term_unqualified_symbol: '(' "_" . SYMBOL num_list ')'
+   67 term_num_constant: '(' "_" . BVCONSTANT NUMERAL ')'
+
+    BVCONSTANT  shift, and go to state 117
+    SYMBOL      shift, and go to state 118
+
+
+State 82
+
+   53 plain_term: '(' "let" . '(' parallel_let_bindings ')' a_term ')'
+
+    '('  shift, and go to state 119
+
+
+State 83
+
+   52 annotated_term: '(' "!" . a_term term_attribute_list ')'
+
+    BINCONSTANT  shift, and go to state 50
+    HEXCONSTANT  shift, and go to state 51
+    RATCONSTANT  shift, and go to state 52
+    NUMERAL      shift, and go to state 53
+    SYMBOL       shift, and go to state 54
+    '('          shift, and go to state 55
+
+    a_term                   go to state 120
+    annotated_term           go to state 57
+    plain_term               go to state 58
+    term_symbol              go to state 59
+    term_unqualified_symbol  go to state 60
+    term_num_constant        go to state 61
+
+
+State 84
+
+   54 plain_term: '(' "forall" . '(' quant_var_list ')' a_term ')'
+
+    '('  shift, and go to state 121
+
+
+State 85
+
+   55 plain_term: '(' "exists" . '(' quant_var_list ')' a_term ')'
+
+    '('  shift, and go to state 122
+
+
+State 86
+
+   60 term_symbol: '(' . "as" term_unqualified_symbol a_sort ')'
+   62 term_unqualified_symbol: '(' . "_" SYMBOL num_list ')'
+
+    "as"  shift, and go to state 80
+    "_"   shift, and go to state 123
+
+
+State 87
+
+   58 plain_term: '(' term_symbol . term_list ')'
+
+    BINCONSTANT  shift, and go to state 50
+    HEXCONSTANT  shift, and go to state 51
+    RATCONSTANT  shift, and go to state 52
+    NUMERAL      shift, and go to state 53
+    SYMBOL       shift, and go to state 54
+    '('          shift, and go to state 55
+
+    a_term                   go to state 99
+    annotated_term           go to state 57
+    plain_term               go to state 58
+    term_symbol              go to state 59
+    term_unqualified_symbol  go to state 60
+    term_num_constant        go to state 61
+    term_list                go to state 124
+
+
+State 88
+
+   32 cmd_assert: '(' "assert" a_term ')' .
+
+    $default  reduce using rule 32 (cmd_assert)
+
+
+State 89
+
+   38 cmd_set_option: '(' "set-option" KEYWORD RATCONSTANT . ')'
+
+    ')'  shift, and go to state 125
+
+
+State 90
+
+   37 cmd_set_option: '(' "set-option" KEYWORD NUMERAL . ')'
+
+    ')'  shift, and go to state 126
+
+
+State 91
+
+   40 cmd_set_option: '(' "set-option" KEYWORD STRING . ')'
+
+    ')'  shift, and go to state 127
+
+
+State 92
+
+   39 cmd_set_option: '(' "set-option" KEYWORD SYMBOL . ')'
+
+    ')'  shift, and go to state 128
+
+
+State 93
+
+   41 cmd_get_info: '(' "get-info" KEYWORD ')' .
+
+    $default  reduce using rule 41 (cmd_get_info)
+
+
+State 94
+
+   44 info_argument: RATCONSTANT .
+
+    $default  reduce using rule 44 (info_argument)
+
+
+State 95
+
+   43 info_argument: NUMERAL .
+
+    $default  reduce using rule 43 (info_argument)
+
+
+State 96
+
+   46 info_argument: STRING .
+
+    $default  reduce using rule 46 (info_argument)
+
+
+State 97
+
+   45 info_argument: SYMBOL .
+
+    $default  reduce using rule 45 (info_argument)
+
+
+State 98
+
+   42 cmd_set_info: '(' "set-info" KEYWORD info_argument . ')'
+
+    ')'  shift, and go to state 129
+
+
+State 99
+
+   80 term_list: a_term .
+
+    $default  reduce using rule 80 (term_list)
+
+
+State 100
+
+   48 cmd_get_value: '(' "get-value" '(' term_list . ')' ')'
+   81 term_list: term_list . a_term
+
+    BINCONSTANT  shift, and go to state 50
+    HEXCONSTANT  shift, and go to state 51
+    RATCONSTANT  shift, and go to state 52
+    NUMERAL      shift, and go to state 53
+    SYMBOL       shift, and go to state 54
+    '('          shift, and go to state 55
+    ')'          shift, and go to state 130
+
+    a_term                   go to state 131
+    annotated_term           go to state 57
+    plain_term               go to state 58
+    term_symbol              go to state 59
+    term_unqualified_symbol  go to state 60
+    term_num_constant        go to state 61
+
+
+State 101
+
+   89 logic_name: SYMBOL '[' NUMERAL . ']'
+
+    ']'  shift, and go to state 132
+
+
+State 102
+
+   23 cmd_declare_sort: '(' "declare-sort" SYMBOL NUMERAL ')' .
+
+    $default  reduce using rule 23 (cmd_declare_sort)
+
+
+State 103
+
+   97 a_sort_param: SYMBOL .
+
+    $default  reduce using rule 97 (a_sort_param)
+
+
+State 104
+
+   24 cmd_define_sort: '(' "define-sort" SYMBOL '(' ')' . a_sort ')'
+
+    SYMBOL  shift, and go to state 107
+    '('     shift, and go to state 108
+
+    a_sort  go to state 133
+
+
+State 105
+
+   25 cmd_define_sort: '(' "define-sort" SYMBOL '(' sort_param_list . ')' a_sort ')'
+   96 sort_param_list: sort_param_list . a_sort_param
+
+    SYMBOL  shift, and go to state 103
+    ')'     shift, and go to state 134
+
+    a_sort_param  go to state 135
+
+
+State 106
+
+   95 sort_param_list: a_sort_param .
+
+    $default  reduce using rule 95 (sort_param_list)
+
+
+State 107
+
+   92 a_sort: SYMBOL .
+
+    $default  reduce using rule 92 (a_sort)
+
+
+State 108
+
+   93 a_sort: '(' . "_" SYMBOL int_list ')'
+   94       | '(' . SYMBOL sort_list ')'
+
+    SYMBOL  shift, and go to state 136
+    "_"     shift, and go to state 137
+
+
+State 109
+
+   26 cmd_declare_fun: '(' "declare-fun" SYMBOL '(' ')' . a_sort ')'
+
+    SYMBOL  shift, and go to state 107
+    '('     shift, and go to state 108
+
+    a_sort  go to state 138
+
+
+State 110
+
+   27 cmd_declare_fun: '(' "declare-fun" SYMBOL '(' sort_list . ')' a_sort ')'
+   91 sort_list: sort_list . a_sort
+
+    SYMBOL  shift, and go to state 107
+    '('     shift, and go to state 108
+    ')'     shift, and go to state 139
+
+    a_sort  go to state 140
+
+
+State 111
+
+   90 sort_list: a_sort .
+
+    $default  reduce using rule 90 (sort_list)
+
+
+State 112
+
+   82 quant_var_list: '(' . SYMBOL a_sort ')'
+
+    SYMBOL  shift, and go to state 141
+
+
+State 113
+
+   28 cmd_define_fun: '(' "define-fun" SYMBOL '(' ')' . a_sort a_term ')'
+
+    SYMBOL  shift, and go to state 107
+    '('     shift, and go to state 108
+
+    a_sort  go to state 142
+
+
+State 114
+
+   29 cmd_define_fun: '(' "define-fun" SYMBOL '(' quant_var_list . ')' a_sort a_term ')'
+   83 quant_var_list: quant_var_list . '(' SYMBOL a_sort ')'
+
+    '('  shift, and go to state 143
+    ')'  shift, and go to state 144
+
+
+State 115
+
+   62 term_unqualified_symbol: '(' . "_" SYMBOL num_list ')'
+
+    "_"  shift, and go to state 123
+
+
+State 116
+
+   60 term_symbol: '(' "as" term_unqualified_symbol . a_sort ')'
+
+    SYMBOL  shift, and go to state 107
+    '('     shift, and go to state 108
+
+    a_sort  go to state 145
+
+
+State 117
+
+   67 term_num_constant: '(' "_" BVCONSTANT . NUMERAL ')'
+
+    NUMERAL  shift, and go to state 146
+
+
+State 118
+
+   62 term_unqualified_symbol: '(' "_" SYMBOL . num_list ')'
+
+    NUMERAL  shift, and go to state 147
+
+    num_list  go to state 148
+
+
+State 119
+
+   53 plain_term: '(' "let" '(' . parallel_let_bindings ')' a_term ')'
+
+    '('  shift, and go to state 149
+
+    parallel_let_bindings  go to state 150
+    let_bindings           go to state 151
+    let_binding            go to state 152
+
+
+State 120
+
+   52 annotated_term: '(' "!" a_term . term_attribute_list ')'
+
+    KEYWORD  shift, and go to state 153
+
+    term_attribute_list  go to state 154
+    term_attribute       go to state 155
+
+
+State 121
+
+   54 plain_term: '(' "forall" '(' . quant_var_list ')' a_term ')'
+
+    '('  shift, and go to state 112
+
+    quant_var_list  go to state 156
+
+
+State 122
+
+   55 plain_term: '(' "exists" '(' . quant_var_list ')' a_term ')'
+
+    '('  shift, and go to state 112
+
+    quant_var_list  go to state 157
+
+
+State 123
+
+   62 term_unqualified_symbol: '(' "_" . SYMBOL num_list ')'
+
+    SYMBOL  shift, and go to state 118
+
+
+State 124
+
+   58 plain_term: '(' term_symbol term_list . ')'
+   81 term_list: term_list . a_term
+
+    BINCONSTANT  shift, and go to state 50
+    HEXCONSTANT  shift, and go to state 51
+    RATCONSTANT  shift, and go to state 52
+    NUMERAL      shift, and go to state 53
+    SYMBOL       shift, and go to state 54
+    '('          shift, and go to state 55
+    ')'          shift, and go to state 158
+
+    a_term                   go to state 131
+    annotated_term           go to state 57
+    plain_term               go to state 58
+    term_symbol              go to state 59
+    term_unqualified_symbol  go to state 60
+    term_num_constant        go to state 61
+
+
+State 125
+
+   38 cmd_set_option: '(' "set-option" KEYWORD RATCONSTANT ')' .
+
+    $default  reduce using rule 38 (cmd_set_option)
+
+
+State 126
+
+   37 cmd_set_option: '(' "set-option" KEYWORD NUMERAL ')' .
+
+    $default  reduce using rule 37 (cmd_set_option)
+
+
+State 127
+
+   40 cmd_set_option: '(' "set-option" KEYWORD STRING ')' .
+
+    $default  reduce using rule 40 (cmd_set_option)
+
+
+State 128
+
+   39 cmd_set_option: '(' "set-option" KEYWORD SYMBOL ')' .
+
+    $default  reduce using rule 39 (cmd_set_option)
+
+
+State 129
+
+   42 cmd_set_info: '(' "set-info" KEYWORD info_argument ')' .
+
+    $default  reduce using rule 42 (cmd_set_info)
+
+
+State 130
+
+   48 cmd_get_value: '(' "get-value" '(' term_list ')' . ')'
+
+    ')'  shift, and go to state 159
+
+
+State 131
+
+   81 term_list: term_list a_term .
+
+    $default  reduce using rule 81 (term_list)
+
+
+State 132
+
+   89 logic_name: SYMBOL '[' NUMERAL ']' .
+
+    $default  reduce using rule 89 (logic_name)
+
+
+State 133
+
+   24 cmd_define_sort: '(' "define-sort" SYMBOL '(' ')' a_sort . ')'
+
+    ')'  shift, and go to state 160
+
+
+State 134
+
+   25 cmd_define_sort: '(' "define-sort" SYMBOL '(' sort_param_list ')' . a_sort ')'
+
+    SYMBOL  shift, and go to state 107
+    '('     shift, and go to state 108
+
+    a_sort  go to state 161
+
+
+State 135
+
+   96 sort_param_list: sort_param_list a_sort_param .
+
+    $default  reduce using rule 96 (sort_param_list)
+
+
+State 136
+
+   94 a_sort: '(' SYMBOL . sort_list ')'
+
+    SYMBOL  shift, and go to state 107
+    '('     shift, and go to state 108
+
+    sort_list  go to state 162
+    a_sort     go to state 111
+
+
+State 137
+
+   93 a_sort: '(' "_" . SYMBOL int_list ')'
+
+    SYMBOL  shift, and go to state 163
+
+
+State 138
+
+   26 cmd_declare_fun: '(' "declare-fun" SYMBOL '(' ')' a_sort . ')'
+
+    ')'  shift, and go to state 164
+
+
+State 139
+
+   27 cmd_declare_fun: '(' "declare-fun" SYMBOL '(' sort_list ')' . a_sort ')'
+
+    SYMBOL  shift, and go to state 107
+    '('     shift, and go to state 108
+
+    a_sort  go to state 165
+
+
+State 140
+
+   91 sort_list: sort_list a_sort .
+
+    $default  reduce using rule 91 (sort_list)
+
+
+State 141
+
+   82 quant_var_list: '(' SYMBOL . a_sort ')'
+
+    SYMBOL  shift, and go to state 107
+    '('     shift, and go to state 108
+
+    a_sort  go to state 166
+
+
+State 142
+
+   28 cmd_define_fun: '(' "define-fun" SYMBOL '(' ')' a_sort . a_term ')'
+
+    BINCONSTANT  shift, and go to state 50
+    HEXCONSTANT  shift, and go to state 51
+    RATCONSTANT  shift, and go to state 52
+    NUMERAL      shift, and go to state 53
+    SYMBOL       shift, and go to state 54
+    '('          shift, and go to state 55
+
+    a_term                   go to state 167
+    annotated_term           go to state 57
+    plain_term               go to state 58
+    term_symbol              go to state 59
+    term_unqualified_symbol  go to state 60
+    term_num_constant        go to state 61
+
+
+State 143
+
+   83 quant_var_list: quant_var_list '(' . SYMBOL a_sort ')'
+
+    SYMBOL  shift, and go to state 168
+
+
+State 144
+
+   29 cmd_define_fun: '(' "define-fun" SYMBOL '(' quant_var_list ')' . a_sort a_term ')'
+
+    SYMBOL  shift, and go to state 107
+    '('     shift, and go to state 108
+
+    a_sort  go to state 169
+
+
+State 145
+
+   60 term_symbol: '(' "as" term_unqualified_symbol a_sort . ')'
+
+    ')'  shift, and go to state 170
+
+
+State 146
+
+   67 term_num_constant: '(' "_" BVCONSTANT NUMERAL . ')'
+
+    ')'  shift, and go to state 171
+
+
+State 147
+
+   76 num_list: NUMERAL .
+
+    $default  reduce using rule 76 (num_list)
+
+
+State 148
+
+   62 term_unqualified_symbol: '(' "_" SYMBOL num_list . ')'
+   77 num_list: num_list . NUMERAL
+
+    NUMERAL  shift, and go to state 172
+    ')'      shift, and go to state 173
+
+
+State 149
+
+   87 let_binding: '(' . SYMBOL a_term ')'
+
+    SYMBOL  shift, and go to state 174
+
+
+State 150
+
+   53 plain_term: '(' "let" '(' parallel_let_bindings . ')' a_term ')'
+
+    ')'  shift, and go to state 175
+
+
+State 151
+
+   84 parallel_let_bindings: let_bindings .
+   86 let_bindings: let_bindings . let_binding
+
+    '('  shift, and go to state 149
+
+    $default  reduce using rule 84 (parallel_let_bindings)
+
+    let_binding  go to state 176
+
+
+State 152
+
+   85 let_bindings: let_binding .
+
+    $default  reduce using rule 85 (let_bindings)
+
+
+State 153
+
+   70 term_attribute: KEYWORD . generic_sexp
+
+    RATCONSTANT  shift, and go to state 94
+    NUMERAL      shift, and go to state 95
+    STRING       shift, and go to state 96
+    SYMBOL       shift, and go to state 97
+    '('          shift, and go to state 177
+
+    info_argument  go to state 178
+    generic_sexp   go to state 179
+
+
+State 154
+
+   52 annotated_term: '(' "!" a_term term_attribute_list . ')'
+   69 term_attribute_list: term_attribute_list . term_attribute
+
+    KEYWORD  shift, and go to state 153
+    ')'      shift, and go to state 180
+
+    term_attribute  go to state 181
+
+
+State 155
+
+   68 term_attribute_list: term_attribute .
+
+    $default  reduce using rule 68 (term_attribute_list)
+
+
+State 156
+
+   54 plain_term: '(' "forall" '(' quant_var_list . ')' a_term ')'
+   83 quant_var_list: quant_var_list . '(' SYMBOL a_sort ')'
+
+    '('  shift, and go to state 143
+    ')'  shift, and go to state 182
+
+
+State 157
+
+   55 plain_term: '(' "exists" '(' quant_var_list . ')' a_term ')'
+   83 quant_var_list: quant_var_list . '(' SYMBOL a_sort ')'
+
+    '('  shift, and go to state 143
+    ')'  shift, and go to state 183
+
+
+State 158
+
+   58 plain_term: '(' term_symbol term_list ')' .
+
+    $default  reduce using rule 58 (plain_term)
+
+
+State 159
+
+   48 cmd_get_value: '(' "get-value" '(' term_list ')' ')' .
+
+    $default  reduce using rule 48 (cmd_get_value)
+
+
+State 160
+
+   24 cmd_define_sort: '(' "define-sort" SYMBOL '(' ')' a_sort ')' .
+
+    $default  reduce using rule 24 (cmd_define_sort)
+
+
+State 161
+
+   25 cmd_define_sort: '(' "define-sort" SYMBOL '(' sort_param_list ')' a_sort . ')'
+
+    ')'  shift, and go to state 184
+
+
+State 162
+
+   91 sort_list: sort_list . a_sort
+   94 a_sort: '(' SYMBOL sort_list . ')'
+
+    SYMBOL  shift, and go to state 107
+    '('     shift, and go to state 108
+    ')'     shift, and go to state 185
+
+    a_sort  go to state 140
+
+
+State 163
+
+   93 a_sort: '(' "_" SYMBOL . int_list ')'
+
+    NUMERAL  shift, and go to state 186
+
+    int_list  go to state 187
+
+
+State 164
+
+   26 cmd_declare_fun: '(' "declare-fun" SYMBOL '(' ')' a_sort ')' .
+
+    $default  reduce using rule 26 (cmd_declare_fun)
+
+
+State 165
+
+   27 cmd_declare_fun: '(' "declare-fun" SYMBOL '(' sort_list ')' a_sort . ')'
+
+    ')'  shift, and go to state 188
+
+
+State 166
+
+   82 quant_var_list: '(' SYMBOL a_sort . ')'
+
+    ')'  shift, and go to state 189
+
+
+State 167
+
+   28 cmd_define_fun: '(' "define-fun" SYMBOL '(' ')' a_sort a_term . ')'
+
+    ')'  shift, and go to state 190
+
+
+State 168
+
+   83 quant_var_list: quant_var_list '(' SYMBOL . a_sort ')'
+
+    SYMBOL  shift, and go to state 107
+    '('     shift, and go to state 108
+
+    a_sort  go to state 191
+
+
+State 169
+
+   29 cmd_define_fun: '(' "define-fun" SYMBOL '(' quant_var_list ')' a_sort . a_term ')'
+
+    BINCONSTANT  shift, and go to state 50
+    HEXCONSTANT  shift, and go to state 51
+    RATCONSTANT  shift, and go to state 52
+    NUMERAL      shift, and go to state 53
+    SYMBOL       shift, and go to state 54
+    '('          shift, and go to state 55
+
+    a_term                   go to state 192
+    annotated_term           go to state 57
+    plain_term               go to state 58
+    term_symbol              go to state 59
+    term_unqualified_symbol  go to state 60
+    term_num_constant        go to state 61
+
+
+State 170
+
+   60 term_symbol: '(' "as" term_unqualified_symbol a_sort ')' .
+
+    $default  reduce using rule 60 (term_symbol)
+
+
+State 171
+
+   67 term_num_constant: '(' "_" BVCONSTANT NUMERAL ')' .
+
+    $default  reduce using rule 67 (term_num_constant)
+
+
+State 172
+
+   77 num_list: num_list NUMERAL .
+
+    $default  reduce using rule 77 (num_list)
+
+
+State 173
+
+   62 term_unqualified_symbol: '(' "_" SYMBOL num_list ')' .
+
+    $default  reduce using rule 62 (term_unqualified_symbol)
+
+
+State 174
+
+   87 let_binding: '(' SYMBOL . a_term ')'
+
+    BINCONSTANT  shift, and go to state 50
+    HEXCONSTANT  shift, and go to state 51
+    RATCONSTANT  shift, and go to state 52
+    NUMERAL      shift, and go to state 53
+    SYMBOL       shift, and go to state 54
+    '('          shift, and go to state 55
+
+    a_term                   go to state 193
+    annotated_term           go to state 57
+    plain_term               go to state 58
+    term_symbol              go to state 59
+    term_unqualified_symbol  go to state 60
+    term_num_constant        go to state 61
+
+
+State 175
+
+   53 plain_term: '(' "let" '(' parallel_let_bindings ')' . a_term ')'
+
+    BINCONSTANT  shift, and go to state 50
+    HEXCONSTANT  shift, and go to state 51
+    RATCONSTANT  shift, and go to state 52
+    NUMERAL      shift, and go to state 53
+    SYMBOL       shift, and go to state 54
+    '('          shift, and go to state 55
+
+    a_term                   go to state 194
+    annotated_term           go to state 57
+    plain_term               go to state 58
+    term_symbol              go to state 59
+    term_unqualified_symbol  go to state 60
+    term_num_constant        go to state 61
+
+
+State 176
+
+   86 let_bindings: let_bindings let_binding .
+
+    $default  reduce using rule 86 (let_bindings)
+
+
+State 177
+
+   72 generic_sexp: '(' . ')'
+   73             | '(' . generic_sexp_list ')'
+
+    RATCONSTANT  shift, and go to state 94
+    NUMERAL      shift, and go to state 95
+    STRING       shift, and go to state 96
+    SYMBOL       shift, and go to state 97
+    '('          shift, and go to state 177
+    ')'          shift, and go to state 195
+
+    info_argument      go to state 178
+    generic_sexp       go to state 196
+    generic_sexp_list  go to state 197
+
+
+State 178
+
+   71 generic_sexp: info_argument .
+
+    $default  reduce using rule 71 (generic_sexp)
+
+
+State 179
+
+   70 term_attribute: KEYWORD generic_sexp .
+
+    $default  reduce using rule 70 (term_attribute)
+
+
+State 180
+
+   52 annotated_term: '(' "!" a_term term_attribute_list ')' .
+
+    $default  reduce using rule 52 (annotated_term)
+
+
+State 181
+
+   69 term_attribute_list: term_attribute_list term_attribute .
+
+    $default  reduce using rule 69 (term_attribute_list)
+
+
+State 182
+
+   54 plain_term: '(' "forall" '(' quant_var_list ')' . a_term ')'
+
+    BINCONSTANT  shift, and go to state 50
+    HEXCONSTANT  shift, and go to state 51
+    RATCONSTANT  shift, and go to state 52
+    NUMERAL      shift, and go to state 53
+    SYMBOL       shift, and go to state 54
+    '('          shift, and go to state 55
+
+    a_term                   go to state 198
+    annotated_term           go to state 57
+    plain_term               go to state 58
+    term_symbol              go to state 59
+    term_unqualified_symbol  go to state 60
+    term_num_constant        go to state 61
+
+
+State 183
+
+   55 plain_term: '(' "exists" '(' quant_var_list ')' . a_term ')'
+
+    BINCONSTANT  shift, and go to state 50
+    HEXCONSTANT  shift, and go to state 51
+    RATCONSTANT  shift, and go to state 52
+    NUMERAL      shift, and go to state 53
+    SYMBOL       shift, and go to state 54
+    '('          shift, and go to state 55
+
+    a_term                   go to state 199
+    annotated_term           go to state 57
+    plain_term               go to state 58
+    term_symbol              go to state 59
+    term_unqualified_symbol  go to state 60
+    term_num_constant        go to state 61
+
+
+State 184
+
+   25 cmd_define_sort: '(' "define-sort" SYMBOL '(' sort_param_list ')' a_sort ')' .
+
+    $default  reduce using rule 25 (cmd_define_sort)
+
+
+State 185
+
+   94 a_sort: '(' SYMBOL sort_list ')' .
+
+    $default  reduce using rule 94 (a_sort)
+
+
+State 186
+
+   78 int_list: NUMERAL .
+
+    $default  reduce using rule 78 (int_list)
+
+
+State 187
+
+   79 int_list: int_list . NUMERAL
+   93 a_sort: '(' "_" SYMBOL int_list . ')'
+
+    NUMERAL  shift, and go to state 200
+    ')'      shift, and go to state 201
+
+
+State 188
+
+   27 cmd_declare_fun: '(' "declare-fun" SYMBOL '(' sort_list ')' a_sort ')' .
+
+    $default  reduce using rule 27 (cmd_declare_fun)
+
+
+State 189
+
+   82 quant_var_list: '(' SYMBOL a_sort ')' .
+
+    $default  reduce using rule 82 (quant_var_list)
+
+
+State 190
+
+   28 cmd_define_fun: '(' "define-fun" SYMBOL '(' ')' a_sort a_term ')' .
+
+    $default  reduce using rule 28 (cmd_define_fun)
+
+
+State 191
+
+   83 quant_var_list: quant_var_list '(' SYMBOL a_sort . ')'
+
+    ')'  shift, and go to state 202
+
+
+State 192
+
+   29 cmd_define_fun: '(' "define-fun" SYMBOL '(' quant_var_list ')' a_sort a_term . ')'
+
+    ')'  shift, and go to state 203
+
+
+State 193
+
+   87 let_binding: '(' SYMBOL a_term . ')'
+
+    ')'  shift, and go to state 204
+
+
+State 194
+
+   53 plain_term: '(' "let" '(' parallel_let_bindings ')' a_term . ')'
+
+    ')'  shift, and go to state 205
+
+
+State 195
+
+   72 generic_sexp: '(' ')' .
+
+    $default  reduce using rule 72 (generic_sexp)
+
+
+State 196
+
+   74 generic_sexp_list: generic_sexp .
+
+    $default  reduce using rule 74 (generic_sexp_list)
+
+
+State 197
+
+   73 generic_sexp: '(' generic_sexp_list . ')'
+   75 generic_sexp_list: generic_sexp_list . generic_sexp
+
+    RATCONSTANT  shift, and go to state 94
+    NUMERAL      shift, and go to state 95
+    STRING       shift, and go to state 96
+    SYMBOL       shift, and go to state 97
+    '('          shift, and go to state 177
+    ')'          shift, and go to state 206
+
+    info_argument  go to state 178
+    generic_sexp   go to state 207
+
+
+State 198
+
+   54 plain_term: '(' "forall" '(' quant_var_list ')' a_term . ')'
+
+    ')'  shift, and go to state 208
+
+
+State 199
+
+   55 plain_term: '(' "exists" '(' quant_var_list ')' a_term . ')'
+
+    ')'  shift, and go to state 209
+
+
+State 200
+
+   79 int_list: int_list NUMERAL .
+
+    $default  reduce using rule 79 (int_list)
+
+
+State 201
+
+   93 a_sort: '(' "_" SYMBOL int_list ')' .
+
+    $default  reduce using rule 93 (a_sort)
+
+
+State 202
+
+   83 quant_var_list: quant_var_list '(' SYMBOL a_sort ')' .
+
+    $default  reduce using rule 83 (quant_var_list)
+
+
+State 203
+
+   29 cmd_define_fun: '(' "define-fun" SYMBOL '(' quant_var_list ')' a_sort a_term ')' .
+
+    $default  reduce using rule 29 (cmd_define_fun)
+
+
+State 204
+
+   87 let_binding: '(' SYMBOL a_term ')' .
+
+    $default  reduce using rule 87 (let_binding)
+
+
+State 205
+
+   53 plain_term: '(' "let" '(' parallel_let_bindings ')' a_term ')' .
+
+    $default  reduce using rule 53 (plain_term)
+
+
+State 206
+
+   73 generic_sexp: '(' generic_sexp_list ')' .
+
+    $default  reduce using rule 73 (generic_sexp)
+
+
+State 207
+
+   75 generic_sexp_list: generic_sexp_list generic_sexp .
+
+    $default  reduce using rule 75 (generic_sexp_list)
+
+
+State 208
+
+   54 plain_term: '(' "forall" '(' quant_var_list ')' a_term ')' .
+
+    $default  reduce using rule 54 (plain_term)
+
+
+State 209
+
+   55 plain_term: '(' "exists" '(' quant_var_list ')' a_term ')' .
+
+    $default  reduce using rule 55 (plain_term)

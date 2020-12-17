@@ -1,0 +1,31 @@
+#!/bin/bash
+#A script for collecting the category maximums from several files within a folder and its subfolders
+#make a file with zeroes to compare with the values of this file and update if a new maximum is found
+
+#awk 'BEGIN{while(i++<=35){print "0"}}' | datamash transpose > newfile.txt
+
+#counter=1
+for i in $(find . -name "top_values.txt")
+#look for all files named top_values.txt within the scope
+do
+#for each 'top_values' cut the bottom, extract the data column and transpose it into a line. Then append it to the temp file
+#    cat $i | sed -n '1, 36p' | awk '{print $2}' | datamash transpose | sed -n '1p' >> temp.txt
+    cat $i | sed -n '1, 36p' | awk '{print $2}' | datamash transpose >> temp.txt
+
+
+    #    counter=$(($counter + 1))
+#    echo $i >> counter.txt
+    #kolla in globala och logikspecifika maxima, och presentera de samlade maxima i en modifierad 'top_values.txt'
+
+    #använd 
+#if [[ $files ]]; then #does this mean not empty? i.e. result
+#fi
+done
+#echo $counter >> counter.txt
+
+#when all 'top_values' are appended line-wise, we use the datamash max function to set the overall max value to each category
+cat temp.txt | datamash -W max 1 max 2 max 3 max 4 max 5 max 6 max 7 max 8 max 9 max 10 max 11 max 12 max 13 max 14 max 15 max 16 max 17 max 18 max 19 max 20 max 21 max 22 max 23 max 24 max 25 max 26 max 27 max 28 max 29 max 30 max 31 max 32 max 33 max 34 max 35 max 36 | datamash transpose > temp2.txt
+
+#finally, we present these values column wise next to their category names 
+paste header.txt temp2.txt | column -t > altogether_top_values.txt
+rm temp.txt temp2.txt
