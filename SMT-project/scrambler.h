@@ -51,8 +51,6 @@ extern int status_missing;
 */
 extern int status; //0 - missing; 1 - sat; 2 -unsat; 3 - unknown
 
-extern int counter_core_true;
-extern int counter_core_false;
 extern int counter_core_not;
 extern int counter_core_imply;
 extern int counter_core_and;
