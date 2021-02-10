@@ -56,8 +56,6 @@ int counter_forall       = 0;
 int counter_exists       = 0;
 
 //CORE OPERATION SYMBOL COUNTER
-int counter_core_true     = 0;
-int counter_core_false    = 0;
 int counter_core_not      = 0;
 int counter_core_imply    = 0;
 int counter_core_and      = 0;
@@ -393,11 +391,9 @@ void shuffle_list(std::vector<node *> *v)
       return true;
     }
     if (s == "true") {
-      ++counter_core_true;
       return false;
     }
     if (s == "false") {
-      ++counter_core_false;
       return false;
     }
     if (s == "not") {
@@ -1188,8 +1184,6 @@ int main(int argc, char **argv)
       counter_let_bindings << ", " <<
       counter_forall << ", " <<
       counter_exists << ", " <<
-      counter_core_true << ", " <<
-      counter_core_false << ", " <<
       counter_core_not << ", " <<
       counter_core_imply << ", " <<
       counter_core_and << ", " <<
